@@ -2,31 +2,33 @@
 using System.Collections;
 
 public class PlayerSteer : MonoBehaviour {
-    public float Speed = 12f;
-    //public float mass = 0.3f;
-    public float TurnSpeed = 180f;
-    //public float jumpForce = 20;
-    //public float jumpReact = 5;
+
     private bool floored = false;
-    //private int jumpCounter = 0;
-    //private float lastJumpAsk;
 
-    //public float jumpTimeMargin = 0.2f;
+    // Vehicle parameters
+    public float MaxSpeed;
+    public float TurnSpeed;
+    public float HoverHeight;
+    public float Acceleration;
 
-    //public int jumpAllowed = 2;
-    private Vector3 acceleration = new Vector3(0f, 0f, 0f);
-    private Vector3 speed = new Vector3(0f, 0f, 0f);
-    private float moveSpeed = 0f;
+    private Rigidbody RBody;
 
+    //Hover values
+    public float gravityScale;
+    public float dampningScale;
+
+    //Input variables
     private string MovementAxisName;
     private string TurnAxisName;
-    private Rigidbody RBody;
     private float MovementInputVal;
     private float TurnInputVal;
+
+    private OrientVehicle Orient;
     
     private void Awake()
     {
         RBody = GetComponent<Rigidbody>();
+        Orient = GetComponent<OrientVehicle>();
     }
 
     private void OnEnable()
@@ -48,53 +50,47 @@ public class PlayerSteer : MonoBehaviour {
         TurnAxisName = "Horizontal";
     }
 
+
+
     private void FixedUpdate()
     {
         Move();
         Turn();
+        Hover();
+    }
+
+
+    private void Hover()
+    {
+        float distanceToFloor = Orient.GroundDistance;
+        Vector3 gravity = (-transform.up) * gravityScale;
+        Vector3 upForce = Orient.normal * (HoverHeight - distanceToFloor) * gravityScale;
+        Vector3 HoverForce = (gravity + upForce);
+        //Debug.Log(gravity +  "  "  + upForce + " " + distanceToFloor);
+        RBody.AddForce(HoverForce);
     }
 
     private void Update()
     {
         MovementInputVal = Input.GetAxis(MovementAxisName);
         TurnInputVal = Input.GetAxis(TurnAxisName);
-
-        /*if (Input.GetButtonDown("Fire1"))
-        {
-            jump();
-        }
-        */
+        Debug.Log(TurnInputVal != 0);
     }
 
     private void Move()
     {
-        Vector3 movement = transform.forward * MovementInputVal * Speed * Time.deltaTime;
+        Vector3 movement = transform.forward * MovementInputVal * Acceleration;
 
-        RBody.MovePosition(RBody.position + movement);
+        if(RBody.velocity.magnitude < MaxSpeed)
+            RBody.AddForce(movement);
     }
 
     private void Turn()
     {
-        float turn = TurnInputVal * TurnSpeed * Time.deltaTime;
+        float turn = TurnInputVal * TurnSpeed;
 
         Quaternion turnRotation = Quaternion.Euler(0f, turn, 0f);
 
         RBody.MoveRotation(RBody.rotation * turnRotation);
     }
-
-    /*
-    void jump()
-    {
-        if (floored || jumpCounter < jumpAllowed)
-        {
-            acceleration.y += mass * jumpForce;
-            speed.y += jumpReact;
-            jumpCounter++;
-            floored = false;
-        }
-        else
-        {
-            lastJumpAsk = Time.time;
-        }
-    }*/
 }
