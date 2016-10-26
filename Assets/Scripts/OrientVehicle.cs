@@ -25,6 +25,6 @@ public class OrientVehicle : MonoBehaviour {
         normal = hit.normal;
         GroundDistance = hit.distance;
         //Debug.Log("Raycast hit " + hit.distance);
-        transform.rotation = Quaternion.FromToRotation(transform.up, normal) * transform.rotation;
+        
 	}
 }
