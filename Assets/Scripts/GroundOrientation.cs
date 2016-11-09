@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class OrientVehicle : MonoBehaviour {
+public class GroundOrientation : MonoBehaviour {
     public float raycastDistance = 10f;
     public float GroundDistance;
     public Vector3 normal;

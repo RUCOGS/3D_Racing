@@ -27,12 +27,12 @@ public class PlayerSteer : MonoBehaviour {
     private float MovementInputVal;
     private float TurnInputVal;
 
-    private OrientVehicle Orient;
+    private GroundOrientation Orient;
     
     private void Awake()
     {
         RBody = GetComponent<Rigidbody>();
-        Orient = GetComponent<OrientVehicle>();
+        Orient = GetComponent<GroundOrientation>();
     }
 
     private void OnEnable()
@@ -54,13 +54,25 @@ public class PlayerSteer : MonoBehaviour {
         TurnAxisName = "Horizontal";
     }
 
-
-
     private void FixedUpdate()
     {
-        Move();
-        Turn();
         Hover();
+        Turn();
+        Move();
+    }
+
+    //Orient vehicle to ground
+    private void OrientVehicle()
+    {
+        float distanceToFloor = Orient.GroundDistance;
+        Vector3 groundNormal = Orient.normal;
+
+        float angle = Vector3.Angle(Orient.normal, transform.up);
+        Vector3 axis = Vector3.Cross(Orient.normal, transform.up).normalized;
+
+        transform.Rotate(axis, Mathf.Lerp(0, angle, .1f));
+
+        //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up, Orient.normal) * transform.rotation, .2f);
     }
 
 
@@ -69,7 +81,10 @@ public class PlayerSteer : MonoBehaviour {
         float distanceToFloor = Orient.GroundDistance;
         //Debug.Log(distanceToFloor + " " + HoverHeight);
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up, Orient.normal) * transform.rotation, .5f);
+
+
+        OrientVehicle();
+        //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up, Orient.normal) * transform.rotation, .2f);
 
         //Decide if default gravity is needed
         Vector3 HoverForce = Vector3.zero;
