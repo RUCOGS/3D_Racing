@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 74ed792cb7b916348aa10bfa38d92b7a
-timeCreated: 1477443649
+guid: 95ed15cafa0858e41b75208bd4a17047
+timeCreated: 1479437223
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -10,7 +10,7 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: Mesh
-    7400000: Take 001
+    7400000: Default Take
     9500000: //RootNode
   materials:
     importMaterials: 1

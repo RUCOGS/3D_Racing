@@ -12,7 +12,17 @@ public class PlayerSteer : MonoBehaviour {
     public float Acceleration;
     public float HoverHeightThreshold;
 
+    // Rigidbody
     private Rigidbody RBody;
+
+    // Raycast
+    public RaycastHit hit;
+    bool grounded;
+
+    public float raycastDistance = 10f;  
+    int groundLayer = 8;
+    int vehicleLayer = 9;
+    int groundMask;
 
     //Hover values
     public float gravityScale;
@@ -27,12 +37,82 @@ public class PlayerSteer : MonoBehaviour {
     private float MovementInputVal;
     private float TurnInputVal;
 
-    private GroundOrientation Orient;
+
     
     private void Awake()
     {
         RBody = GetComponent<Rigidbody>();
-        Orient = GetComponent<GroundOrientation>();
+        groundMask = 1 << groundLayer;
+    }
+
+    private void Start()
+    {
+        MovementAxisName = "Vertical";
+        TurnAxisName = "Horizontal";
+    }
+
+    private void Update()
+    {
+        MovementInputVal = Input.GetAxis(MovementAxisName);
+        TurnInputVal = Input.GetAxis(TurnAxisName);
+    }
+
+    private void FixedUpdate()
+    {
+        Raycast();
+        Hover();
+        Turn();
+        Move();
+    }
+
+    private void Raycast()
+    {
+        Vector3 dwn = transform.TransformDirection(Vector3.down);
+        grounded = Physics.Raycast(transform.position, dwn, out hit, raycastDistance, groundMask);
+        //Debug.Log("Raycast hit " + hit.distance);
+    }
+
+    //Orient vehicle to ground
+    private void OrientVertical()
+    {
+        float distanceToFloor = hit.distance;
+        Vector3 groundNormal = hit.normal;
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation, .2f);
+    }
+
+
+    private void Hover()
+    {
+        OrientVertical();
+
+        float distanceToFloor = hit.distance;
+        Debug.Log(hit.distance);
+
+        //Decide if default gravity is needed
+        Vector3 HoverForce = Vector3.zero;
+        if (grounded)
+        {
+            HoverForce = transform.up * gravityScale * Mathf.Pow((HoverHeight / distanceToFloor), 3);
+        }
+        HoverForce += -transform.up * gravityScale;
+        RBody.AddForce(HoverForce);
+    }
+
+    private void Move()
+    {
+        Vector3 movement = transform.forward * MovementInputVal * Acceleration;
+
+        if(RBody.velocity.magnitude < MaxSpeed && hit.distance != 0)
+            RBody.AddForce(movement);
+    }
+
+    private static float prevYRot = Quaternion.identity.eulerAngles.y;
+
+    private void Turn()
+    {
+        float turn = TurnInputVal * TurnSpeed;
+        transform.RotateAround(transform.position, transform.up, turn);
     }
 
     private void OnEnable()
@@ -46,88 +126,5 @@ public class PlayerSteer : MonoBehaviour {
     private void OnDisable()
     {
         RBody.isKinematic = true;
-    }
-
-    private void Start()
-    {
-        MovementAxisName = "Vertical";
-        TurnAxisName = "Horizontal";
-    }
-
-    private void FixedUpdate()
-    {
-        Hover();
-        Turn();
-        Move();
-    }
-
-    //Orient vehicle to ground
-    private void OrientVehicle()
-    {
-        float distanceToFloor = Orient.GroundDistance;
-        Vector3 groundNormal = Orient.normal;
-
-        float angle = Vector3.Angle(Orient.normal, transform.up);
-        Vector3 axis = Vector3.Cross(Orient.normal, transform.up).normalized;
-
-        transform.Rotate(axis, Mathf.Lerp(0, angle, .1f));
-
-        //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up, Orient.normal) * transform.rotation, .2f);
-    }
-
-
-    private void Hover()
-    {
-        float distanceToFloor = Orient.GroundDistance;
-        //Debug.Log(distanceToFloor + " " + HoverHeight);
-
-
-
-        OrientVehicle();
-        //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up, Orient.normal) * transform.rotation, .2f);
-
-        //Decide if default gravity is needed
-        Vector3 HoverForce = Vector3.zero;
-        if (distanceToFloor != 0)
-        {
-            
-            if (distanceToFloor > HoverHeight + HoverHeightThreshold)
-            {
-                HoverForce = -transform.up * gravityScale * Mathf.Abs(HoverHeight - distanceToFloor);
-                gravDirCache = -transform.up;
-            }
-            else if (distanceToFloor < HoverHeight - HoverHeightThreshold)
-            {
-                HoverForce = transform.up * gravityScale * gravityScale * Mathf.Abs(HoverHeight - distanceToFloor);
-            }
-            
-        }
-        else
-        {
-            HoverForce = gravDirCache * defaultGravScale;
-        }
-        RBody.AddForce(HoverForce);
-    }
-
-    private void Update()
-    {
-        MovementInputVal = Input.GetAxis(MovementAxisName);
-        TurnInputVal = Input.GetAxis(TurnAxisName);
-    }
-
-    private void Move()
-    {
-        Vector3 movement = transform.forward * MovementInputVal * Acceleration;
-
-        if(RBody.velocity.magnitude < MaxSpeed && Orient.GroundDistance != 0)
-            RBody.AddForce(movement);
-    }
-
-    private static float prevYRot = Quaternion.identity.eulerAngles.y;
-
-    private void Turn()
-    {
-        float turn = TurnInputVal * TurnSpeed;
-        transform.RotateAround(transform.position, transform.up, turn);
     }
 }
