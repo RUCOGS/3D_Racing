@@ -1,0 +1,109 @@
+[33mcommit a38b4d6c91b0dcd60c0bb8eda46b8ac3a4803020[m
+Author: ViggyNash <viggyviggynash@gmail.com>
+Date:   Thu Nov 17 22:15:03 2016 -0500
+
+    somehow fixed the collision issue, also properly imported car model with slight modification
+
+[33mcommit 3f9c816d9ff3f02616880e7c6ece803511727d51[m
+Author: ViggyNash <viggyviggynash@gmail.com>
+Date:   Tue Nov 8 20:52:36 2016 -0500
+
+    alt orientation model, induces motion sickness
+
+[33mcommit 7075efc8a83208b22edffab764246241e39a5590[m
+Author: ViggyNash <viggyviggynash@gmail.com>
+Date:   Tue Oct 25 21:10:10 2016 -0400
+
+    Car model issues still need fixing
+
+[33mcommit 14fab17e01b185bdd17903342b64645e9ac5f3ed[m
+Author: Andrew Marshall <andrewleonmarshall@gmail.com>
+Date:   Tue Oct 25 20:54:54 2016 -0400
+
+    Tunnel mesh for track
+
+[33mcommit d4b1f86fbc59a14fd84bfb7fca86719f2165d30b[m
+Merge: dd73cc3 6b81f51
+Author: Andrew Marshall <andrewleonmarshall@gmail.com>
+Date:   Tue Oct 18 21:29:24 2016 -0400
+
+    merge issues
+
+[33mcommit dd73cc30a292efd7e9c1d15e56d3dba98507295c[m
+Author: Andrew Marshall <andrewleonmarshall@gmail.com>
+Date:   Tue Oct 18 21:26:22 2016 -0400
+
+    added car model
+
+[33mcommit 6b81f51333724221d87b236ec0452ccbcdc52a58[m
+Author: ViggyNash <viggyviggynash@gmail.com>
+Date:   Tue Oct 18 21:23:28 2016 -0400
+
+    Saved scene data
+
+[33mcommit f8dacfa9430338ab8ff818f9831ca17880792c69[m
+Author: ViggyNash <viggyviggynash@gmail.com>
+Date:   Tue Oct 18 21:17:46 2016 -0400
+
+    Implemented physics based hover and movement
+
+[33mcommit d2f2309532a703bf7c78c301e76c3cbcaa8d0fa5[m
+Merge: 2d3ecf4 2f5e0cf
+Author: ViggyNash <viggyviggynash@gmail.com>
+Date:   Tue Oct 11 20:44:56 2016 -0400
+
+    Fixed merge conflicts?
+
+[33mcommit 2f5e0cf7a4edc9d26e937236db731ce936bca132[m
+Author: Andrew Marshall <andrewleonmarshall@gmail.com>
+Date:   Tue Oct 11 20:33:17 2016 -0400
+
+    initial antigrav stuff. zero g problems tho...
+
+[33mcommit 2d3ecf43de240fb7210d6320b67223e009eda98d[m
+Author: ViggyNash <viggyviggynash@gmail.com>
+Date:   Tue Oct 11 20:25:33 2016 -0400
+
+    something
+
+[33mcommit ecf7fc14489bac98677b6d33e45ba5d545880224[m
+Author: ViggyNash <viggyviggynash@gmail.com>
+Date:   Tue Oct 11 20:22:35 2016 -0400
+
+    Update .gitignore
+
+[33mcommit da9c7312068808d4239f814bd100ac86fc2e4989[m
+Author: Aaron-Landry <Lolutah@gmail.com>
+Date:   Tue Oct 11 20:06:11 2016 -0400
+
+    Delete imgay.txt
+
+[33mcommit 410273789474ef18838cd4b6f931df34843e15a2[m
+Author: Aaron-Landry <lolutah@gmail.com>
+Date:   Tue Oct 11 19:55:31 2016 -0400
+
+    im gay
+
+[33mcommit ae94199109e5d704016fcd1d437266af8bc5faea[m
+Author: murtalaliyu <murtalaliyu10@yahoo.com>
+Date:   Tue Oct 4 20:37:56 2016 -0400
+
+    add your name to contributors
+
+[33mcommit bde5281888df68a4d99a061404a1fc2a3f27ec38[m
+Author: ViggyNash <viggyviggynash@gmail.com>
+Date:   Tue Oct 4 20:29:24 2016 -0400
+
+    Initial Commit
+
+[33mcommit ace1c5fecbb0edae3b4a79dd2144402f861e63f8[m
+Author: ViggyNash <viggyviggynash@gmail.com>
+Date:   Tue Oct 4 20:26:59 2016 -0400
+
+    Initial Commit
+
+[33mcommit 4fb2da1f8cd1aa54f8130fb0ba0e5c3ee3c2ea6d[m
+Author: Andrew Marshall <andrewleonmarshall@gmail.com>
+Date:   Tue Oct 4 20:01:02 2016 -0400
+
+    Initial commit
