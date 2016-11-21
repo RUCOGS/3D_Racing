@@ -3,59 +3,61 @@ using System.Collections;
 
 public class VehicleController : MonoBehaviour {
 
-    // Hover wheel objects
-    Transform FLWheel, FRWheel, BLWheel, BRWheel;
-    Rigidbody FLrbody, FRrbody, BLrbody, BRrbody;
+    // Wheels
+    public Rigidbody FLWheel;
+    public Rigidbody FRWheel;
 
-    // Car body object
-    Transform Car;
-    Rigidbody CarBody;
+    // Physics
+    Rigidbody RBody;
+    public float Acceleration;
+    public float TurnSpeed;
+
+    // Input
+    private string MovementAxisName;
+    private string TurnAxisName;
+    private float MovementInputVal;
+    private float TurnInputVal;
 
     // AWAKE
     void Awake ()
     {
-        FLWheel = transform.FindChild("FLWheel");
-        FRWheel = transform.FindChild("FRWheel");
-        BLWheel = transform.FindChild("BLWheel");
-        BRWheel = transform.FindChild("BRWheel");
-
-        FLrbody = FLWheel.GetComponent<Rigidbody>();
-        FRrbody = FLWheel.GetComponent<Rigidbody>();
-        BLrbody = FLWheel.GetComponent<Rigidbody>();
-        BRrbody = FLWheel.GetComponent<Rigidbody>();
-
-        Car = transform.FindChild("car");
-        CarBody = Car.GetComponent<Rigidbody>();
-
+        RBody = GetComponent<Rigidbody>();
     }
 
 	// START
-	void Start ()
+    private void Start()
     {
-        // Calculate center of wheels
-        Vector3 centroid =
-            new Vector3(
-                (FLWheel.position.x + FRWheel.position.x + BLWheel.position.x + BRWheel.position.x) / 4,
-                (FLWheel.position.y + FRWheel.position.y + BLWheel.position.y + BRWheel.position.y) / 4,
-                (FLWheel.position.z + FRWheel.position.z + BLWheel.position.z + BRWheel.position.z) / 4
-            );
-
-        // Calculate up vector. Use arbitrary two distance vectors between three wheels.
-        Vector3 upOrient = Vector3.Cross(FRWheel.position - BRWheel.position, FRWheel.position - FLWheel.position);
-
-        // Position car object wrt centroid and up vector
-        Car.position = centroid;
-        Car.rotation = Quaternion.Slerp(Car.rotation, Quaternion.FromToRotation(Car.up, upOrient) * Car.rotation, .2f);
+        MovementAxisName = "Vertical";
+        TurnAxisName = "Horizontal";
     }
-	
-	// UPDATE
-	void FixedUpdate ()
+
+    private void Update()
     {
-        OrientVehicle();
+        MovementInputVal = Input.GetAxis(MovementAxisName);
+        TurnInputVal = Input.GetAxis(TurnAxisName);
+        Debug.Log(MovementInputVal + " " + TurnInputVal);
+    }
+
+    // UPDATE
+    void FixedUpdate ()
+    {
+        Move();
 	}
 
-    void OrientVehicle()
+    // MOVEMENT
+    void Move()
     {
+        // For some reason the car is oriented the wrong way so we need to use the right vector
+        RBody.AddForce(transform.right * MovementInputVal * Acceleration, ForceMode.Acceleration);
+        Debug.Log("Speed = " + RBody.velocity);
+    }
 
+    void Turn()
+    {
+        float turn = TurnInputVal * TurnSpeed;
+        FLWheel.AddForce(transform.right * turn);
+        FRWheel.AddForce(transform.right * turn);
+        //transform.RotateAround(transform.position, transform.up, turn);
+        //RBody.velocity = velocity;
     }
 }
