@@ -35,13 +35,14 @@ public class VehicleController : MonoBehaviour {
     {
         MovementInputVal = Input.GetAxis(MovementAxisName);
         TurnInputVal = Input.GetAxis(TurnAxisName);
-        Debug.Log(MovementInputVal + " " + TurnInputVal);
+        //Debug.Log(MovementInputVal + " " + TurnInputVal);
     }
 
     // UPDATE
     void FixedUpdate ()
     {
         Move();
+        Turn();
 	}
 
     // MOVEMENT
@@ -49,14 +50,14 @@ public class VehicleController : MonoBehaviour {
     {
         // For some reason the car is oriented the wrong way so we need to use the right vector
         RBody.AddForce(transform.right * MovementInputVal * Acceleration, ForceMode.Acceleration);
-        Debug.Log("Speed = " + RBody.velocity);
+        //Debug.Log("Speed = " + RBody.velocity);
     }
 
     void Turn()
     {
         float turn = TurnInputVal * TurnSpeed;
-        FLWheel.AddForce(transform.right * turn);
-        FRWheel.AddForce(transform.right * turn);
+        FLWheel.AddForce(FLWheel.transform.right * turn);
+        FRWheel.AddForce(FRWheel.transform.right * turn);
         //transform.RotateAround(transform.position, transform.up, turn);
         //RBody.velocity = velocity;
     }

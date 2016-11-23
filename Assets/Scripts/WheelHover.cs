@@ -10,6 +10,7 @@ public class WheelHover : MonoBehaviour {
     Vector3 fallDirection;
     public float gravityScale;
     public float HoverHeight;
+    public float HoverThreshold;
 
     // Raycast
     public RaycastHit hit;
@@ -54,7 +55,7 @@ public class WheelHover : MonoBehaviour {
         float distanceToFloor = hit.distance;
         Vector3 groundNormal = hit.normal;
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation, .2f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation, .1f);
         Debug.DrawRay(transform.position, -transform.up);
     }
 
@@ -70,10 +71,14 @@ public class WheelHover : MonoBehaviour {
         Vector3 HoverForce = Vector3.zero;
         if (grounded)
         {
-            HoverForce = transform.up * gravityScale * Mathf.Pow((HoverHeight / distanceToFloor), 3);
+            if (distanceToFloor < HoverThreshold)
+            {
+                transform.Translate(transform.up * (HoverThreshold - distanceToFloor));
+            }
+            HoverForce = transform.up * gravityScale * Mathf.Pow((HoverHeight / distanceToFloor), 1);
         }
         HoverForce += -transform.up * gravityScale;
-        Debug.Log(HoverForce+" "+hit.distance+" "+grounded);
+        //Debug.Log(HoverForce+" "+hit.distance+" "+grounded);
         //RBody.AddForceAtPosition(HoverForce, transform.position);
         RBody.AddForce(HoverForce);
     }
