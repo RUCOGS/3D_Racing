@@ -9,7 +9,7 @@ public class VehicleController : MonoBehaviour {
 
     // Physics
     Rigidbody RBody;
-    public float Acceleration;
+    public float acceleration;
     public float TurnSpeed;
 
     // Input
@@ -49,16 +49,18 @@ public class VehicleController : MonoBehaviour {
     void Move()
     {
         // For some reason the car is oriented the wrong way so we need to use the right vector
-        RBody.AddForce(transform.right * MovementInputVal * Acceleration, ForceMode.Acceleration);
+        RBody.AddForce(transform.right * MovementInputVal * acceleration, ForceMode.Acceleration);
+        RBody.velocity = transform.TransformVector(Vector3.Scale(transform.InverseTransformVector(RBody.velocity), new Vector3(1, 1, 0)));
         //Debug.Log("Speed = " + RBody.velocity);
     }
 
     void Turn()
     {
         float turn = TurnInputVal * TurnSpeed;
-        FLWheel.AddForce(FLWheel.transform.right * turn);
-        FRWheel.AddForce(FRWheel.transform.right * turn);
-        //transform.RotateAround(transform.position, transform.up, turn);
+        Vector3 offset = -transform.right * 3;
+        //FLWheel.AddForce(FLWheel.transform.right * turn);
+        //FRWheel.AddForce(FRWheel.transform.right * turn);
+        transform.RotateAround(transform.position + offset, transform.up, turn);
         //RBody.velocity = velocity;
     }
 }
